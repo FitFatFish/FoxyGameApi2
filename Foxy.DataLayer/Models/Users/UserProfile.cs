@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Foxy.DataLayer.Models.FoxyGame;
+using Foxy.DataLayer.Models.Games;
 using Foxy.DataLayer.Models.Support;
 
 namespace Foxy.DataLayer.Models.Users

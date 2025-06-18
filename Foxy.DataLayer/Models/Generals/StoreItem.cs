@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Foxy.DataLayer.Models.Games;
+using Foxy.DataLayer.Models.Users;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Foxy.DataLayer.Models.Public;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Foxy.DataLayer.Models.FoxyGame
+namespace Foxy.DataLayer.Models.Generals
 {
     public class StoreItem
     {
