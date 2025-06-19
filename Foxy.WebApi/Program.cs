@@ -1,4 +1,7 @@
 
+using Foxy.DataLayer.DBContext;
+using Microsoft.EntityFrameworkCore;
+
 namespace Foxy.WebApi
 {
     public class Program
@@ -10,12 +13,13 @@ namespace Foxy.WebApi
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<FoxyDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -24,7 +28,6 @@ namespace Foxy.WebApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
