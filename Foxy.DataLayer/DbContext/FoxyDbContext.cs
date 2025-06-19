@@ -28,6 +28,7 @@ public class FoxyDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
         InstallRequiredExtension(modelBuilder);
         AssignUuidToId(modelBuilder);
 
