@@ -1,21 +1,4 @@
-﻿//using Foxy.DataLayer.Models.FoxyGame;
-//using Foxy.DataLayer.Models.FoxyUser;
-//using Foxy.DataLayer.Models.Games;
-//using Foxy.DataLayer.Models.Generals;
-//using Foxy.DataLayer.Models.Public;
-//using Foxy.DataLayer.Models.Support;
-//using Foxy.DataLayer.Models.Users;
-//using Microsoft.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore.Infrastructure;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Linq;
-//using System.Linq.Expressions;
-//using System.Reflection.Emit;
-//using System.Text;
-//using System.Threading.Tasks;
-
+﻿using Foxy.DataLayer.Mappings;
 using Foxy.DataLayer.Models.Games;
 using Foxy.DataLayer.Models.Generals;
 using Foxy.DataLayer.Models.Support;
@@ -41,5 +24,45 @@ public class FoxyDbContext : DbContext
     public DbSet<Suggestion> Suggestions { get; set; }
     public DbSet<SuggestionVote> SuggestionVotes { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        InstallRequiredExtension(modelBuilder);
+        AssignUuidToId(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new GameCategoryMap());
+        modelBuilder.ApplyConfiguration(new GameMap());
+        modelBuilder.ApplyConfiguration(new MatchMap());
+        modelBuilder.ApplyConfiguration(new MatchMemberMap());
+        modelBuilder.ApplyConfiguration(new StoreItemMap());
+        modelBuilder.ApplyConfiguration(new UserItemMap());
+        modelBuilder.ApplyConfiguration(new UserProfileMap());
+        modelBuilder.ApplyConfiguration(new UserHeaderImageMap());
+        modelBuilder.ApplyConfiguration(new SuggestionMap());
+        modelBuilder.ApplyConfiguration(new SuggestionVoteMap());
+        modelBuilder.ApplyConfiguration(new TicketMap());
+    }
+
+    private void InstallRequiredExtension(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasPostgresExtension("uuid-ossp");
+    }
+
+    private void AssignUuidToId(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var clrType = entityType.ClrType;
+
+            var idProperty = clrType.GetProperty("Id");
+            if (idProperty != null && idProperty.PropertyType == typeof(Guid))
+            {
+                modelBuilder.Entity(clrType)
+                    .Property("Id")
+                    .HasDefaultValueSql("uuid_generate_v4()");
+            }
+        }
+    }
 }
 
