@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Foxy.WebApi.Controllers
 {
+    // todo: replace all api with dto's 
+
     [ApiController]
     [Route("api/[controller]")]
     public class GameCategoryController : ControllerBase
