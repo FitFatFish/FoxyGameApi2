@@ -1,5 +1,7 @@
 
 using Foxy.DataLayer.DBContext;
+using Foxy.WebApi.Repositories;
+using Foxy.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Foxy.WebApi
@@ -10,7 +12,10 @@ namespace Foxy.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<GameCategoryService>();
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
