@@ -12,14 +12,19 @@ namespace Foxy.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            
+            // Add services to the container.
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<GameCategoryService>();
 
+            // Add Swagger services
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
+            // Configure PostgreSQL database
             builder.Services.AddDbContext<FoxyDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -27,7 +32,8 @@ namespace Foxy.WebApi
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
