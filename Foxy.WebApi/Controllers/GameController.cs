@@ -1,21 +1,21 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
 using Foxy.DataLayer.Models.Games;
 using Foxy.WebApi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foxy.WebApi.Controllers
 {
-    // todo: replace all api with dto's 
-
-    [ApiController]
     [Route("api/[controller]")]
-    public class GameCategoryController : ControllerBase
+    [ApiController]
+    public class GameController : ControllerBase
     {
-        private readonly GameCategoryService _service;
+        private readonly GameService _service;
         private readonly IMapper _mapper;
-        public GameCategoryController(GameCategoryService service, IMapper mapper)
+
+        public GameController(GameService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
@@ -33,15 +33,15 @@ namespace Foxy.WebApi.Controllers
                 return NotFound();
             }
 
-            var result = _mapper.Map<GameCategoryResDto>(item);
-            return  Ok(result);
+            var result = _mapper.Map<GameResDto>(item);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(GameCategoryReqDto reqentity)
+        public async Task<IActionResult> Create(GameReqDto reqentity)
         {
             var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
-            var entity = _mapper.Map<GameCategory>(reqentity);
+            var entity = _mapper.Map<Game>(reqentity);
             entity.CreatedBy = Guid.Parse(userid);
             entity.CreatedAt = DateTime.Now.ToUniversalTime();
             var created = await _service.CreateAsync(entity);
@@ -49,11 +49,11 @@ namespace Foxy.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, GameCategoryReqDto reqentity)
+        public async Task<IActionResult> Update(Guid id, GameReqDto reqentity)
         {
             //var entity = await _service.GetByIdAsync(id);
             //entity.Title = reqentity.Title;
-            var entity = _mapper.Map<GameCategory>(reqentity);
+            var entity = _mapper.Map<Game>(reqentity);
             if (id != entity.Id) return BadRequest();
             await _service.UpdateAsync(entity);
             return NoContent();
