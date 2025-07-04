@@ -4,7 +4,7 @@ namespace Foxy.DataLayer.Models.Games
 {
     public class Game : BaseCrudModel
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } 
         public Guid GameCategoryId { get; set; }
 
         public string Title { get; set; }
