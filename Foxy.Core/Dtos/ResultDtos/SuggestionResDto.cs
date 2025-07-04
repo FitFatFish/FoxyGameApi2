@@ -1,5 +1,7 @@
 ﻿
 
+using Foxy.Core.Infrastructures.Enums;
+
 namespace Foxy.Core.Dtos.ResultDtos;
 
     public class SuggestionResDto

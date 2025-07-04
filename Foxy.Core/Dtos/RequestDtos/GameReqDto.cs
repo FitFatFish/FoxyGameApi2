@@ -2,7 +2,7 @@
 
 namespace Foxy.Core.Dtos.RequestDtos;
 
-    public class GameResDto
+    public class GameReqDto
 {
     public Guid Id { get; set; } 
     public Guid GameCategoryId { get; set; }

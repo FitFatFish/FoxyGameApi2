@@ -1,5 +1,6 @@
 
 using Foxy.DataLayer.DBContext;
+using Foxy.DataLayer.Mappings;
 using Foxy.WebApi.Repositories;
 using Foxy.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace Foxy.WebApi
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             // Configure PostgreSQL database
             builder.Services.AddDbContext<FoxyDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
