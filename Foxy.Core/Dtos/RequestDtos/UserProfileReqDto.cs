@@ -2,7 +2,7 @@ namespace Foxy.Core.Dtos.RequestDtos;
 
 public class UserProfileResDto
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string AccountId { get; set; }
     public string Bio { get; set; }
     public string HeaderImageGuid { get; set; }

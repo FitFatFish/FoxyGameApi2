@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
     public class MatchResDto
     {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public Guid GameId { get; set; }
 
     public DateTime BeginDate { get; set; }

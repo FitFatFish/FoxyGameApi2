@@ -9,7 +9,7 @@ namespace Foxy.Core.Dtos.RequestDtos;
 
     public class SuggestionResDto
     {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 
     public string Title { get; set; }
     public string Description { get; set; }
