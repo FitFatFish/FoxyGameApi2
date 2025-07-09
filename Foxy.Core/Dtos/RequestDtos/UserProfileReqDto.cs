@@ -1,6 +1,6 @@
 namespace Foxy.Core.Dtos.RequestDtos;
 
-public class UserProfileResDto
+public class UserProfileReqDto
 {
     public Guid? Id { get; set; }
     public string AccountId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Foxy.Core.Dtos.RequestDtos;
 
-public class SuggestionVoteResDto
+public class SuggestionVoteReqDto
 {
     public Guid? Id { get; set; }
     public Guid SuggestionId { get; set; }

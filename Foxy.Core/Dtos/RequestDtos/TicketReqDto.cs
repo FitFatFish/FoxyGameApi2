@@ -1,6 +1,6 @@
 namespace Foxy.Core.Dtos.RequestDtos;
 
-public class TicketResDto
+public class TicketReqDto
 {
     public Guid? Id { get; set; }
     public string Title { get; set; }
