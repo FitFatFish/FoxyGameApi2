@@ -1,12 +1,10 @@
-﻿
+﻿namespace Foxy.Core.Dtos.ResultDtos;
 
-namespace Foxy.Core.Dtos.ResultDtos;
- 
-    public class SuggestionVoteResDto
+public class SuggestionVoteResDto
 {
     public Guid Id { get; set; }
     public Guid SuggestionId { get; set; }
     public Guid UserProfileId { get; set; }
     public bool Like { get; set; }
 }
- 
+

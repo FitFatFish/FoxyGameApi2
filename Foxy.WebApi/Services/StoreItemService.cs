@@ -1,5 +1,4 @@
-﻿using Foxy.DataLayer.Models.StoreItems;
-using Foxy.DataLayer.Models.Generals;
+﻿using Foxy.DataLayer.Models.Generals;
 using Foxy.WebApi.Repositories;
 
 namespace Foxy.WebApi.Services;

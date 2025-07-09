@@ -3,7 +3,6 @@ using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
 using Foxy.DataLayer.Models.Games;
 using Foxy.WebApi.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foxy.WebApi.Controllers

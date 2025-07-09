@@ -1,3 +1,5 @@
+using Foxy.Core.Infrastructures.Enums;
+
 namespace Foxy.Core.Dtos.ResultDtos;
 
 public class StoreItemResDto
@@ -7,5 +9,5 @@ public class StoreItemResDto
     public string Title { get; set; }
     public int Level { get; set; }
     public string ImageGuid { get; set; }
-    public int Type { get; set; } // Use enum or int as needed
+    public StoreItemTypeEnum Type { get; set; } // Use enum or int as needed
 }

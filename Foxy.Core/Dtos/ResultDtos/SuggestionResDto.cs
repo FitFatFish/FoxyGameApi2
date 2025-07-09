@@ -1,11 +1,9 @@
-﻿
-
-using Foxy.Core.Infrastructures.Enums;
+﻿using Foxy.Core.Infrastructures.Enums;
 
 namespace Foxy.Core.Dtos.ResultDtos;
 
-    public class SuggestionResDto
-    {
+public class SuggestionResDto
+{
     public Guid Id { get; set; }
 
     public string Title { get; set; }

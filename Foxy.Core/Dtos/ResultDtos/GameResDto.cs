@@ -1,10 +1,8 @@
-﻿
+﻿namespace Foxy.Core.Dtos.ResultDtos;
 
-namespace Foxy.Core.Dtos.ResultDtos;
-
-    public class GameResDto
+public class GameResDto
 {
-    public Guid Id { get; set; } 
+    public Guid Id { get; set; }
     public Guid GameCategoryId { get; set; }
 
     public string Title { get; set; }

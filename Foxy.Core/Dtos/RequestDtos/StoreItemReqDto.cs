@@ -1,6 +1,6 @@
 namespace Foxy.Core.Dtos.RequestDtos;
 
-public class StoreItemResDto
+public class StoreItemReqDto
 {
     public Guid? Id { get; set; }
     public Guid? GameId { get; set; }

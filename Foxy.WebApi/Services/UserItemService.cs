@@ -1,5 +1,4 @@
-﻿using Foxy.DataLayer.Models.UserItems;
-using Foxy.DataLayer.Models.Users;
+﻿using Foxy.DataLayer.Models.Users;
 using Foxy.WebApi.Repositories;
 
 namespace Foxy.WebApi.Services;

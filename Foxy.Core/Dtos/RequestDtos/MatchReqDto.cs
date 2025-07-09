@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Foxy.Core.Dtos.RequestDtos;
 
-
-    public class MatchResDto
-    {
+public class MatchReqDto
+{
     public Guid? Id { get; set; }
     public Guid GameId { get; set; }
 
     public DateTime BeginDate { get; set; }
     public DateTime? EndDate { get; set; }
 }
-

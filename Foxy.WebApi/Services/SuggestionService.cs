@@ -1,5 +1,4 @@
-﻿using Foxy.DataLayer.Models.Suggestions;
-using Foxy.DataLayer.Models.Support;
+﻿using Foxy.DataLayer.Models.Support;
 using Foxy.WebApi.Repositories;
 
 namespace Foxy.WebApi.Services;

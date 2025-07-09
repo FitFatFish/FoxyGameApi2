@@ -13,7 +13,7 @@ namespace Foxy.DataLayer.Models.Generals
         public string Title { get; set; }
         public int Level { get; set; }
         public string ImageGuid { get; set; }
-        public StoreTypeEnum Type { get; set; }
+        public StoreItemTypeEnum Type { get; set; }
 
         public Game Game { get; set; }
 
