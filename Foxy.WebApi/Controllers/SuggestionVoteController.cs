@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
-using Foxy.DataLayer.Models.SuggestionVotes;
+using Foxy.DataLayer.Models.Support;
 using Foxy.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,8 +39,7 @@ namespace Foxy.WebApi.Controllers
         {
             var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
             var entity = _mapper.Map<SuggestionVote>(reqentity);
-            entity.CreatedBy = Guid.Parse(userid);
-            entity.CreatedAt = DateTime.Now.ToUniversalTime();
+           
             var created = await _service.CreateAsync(entity);
             return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
         }
