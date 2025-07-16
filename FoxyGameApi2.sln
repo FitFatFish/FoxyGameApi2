@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{02EA681E-C
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiIntegrationTest", "ApiIntegrationTest\ApiIntegrationTest.csproj", "{6BA7E2BB-4DD8-49AC-B926-72C9194ABA25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{0DFBAC65-1F13-4F0F-B79F-213B315798EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DFBAC65-1F13-4F0F-B79F-213B315798EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DFBAC65-1F13-4F0F-B79F-213B315798EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BA7E2BB-4DD8-49AC-B926-72C9194ABA25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA7E2BB-4DD8-49AC-B926-72C9194ABA25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA7E2BB-4DD8-49AC-B926-72C9194ABA25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA7E2BB-4DD8-49AC-B926-72C9194ABA25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
