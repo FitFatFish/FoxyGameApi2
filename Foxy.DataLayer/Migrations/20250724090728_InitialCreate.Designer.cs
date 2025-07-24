@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Foxy.DataLayer.Migrations
 {
     [DbContext(typeof(FoxyDbContext))]
-    [Migration("20250619112213_InitialCreate")]
+    [Migration("20250724090728_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
