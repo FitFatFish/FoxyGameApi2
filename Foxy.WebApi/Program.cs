@@ -1,4 +1,3 @@
-
 using Foxy.DataLayer.DBContext;
 using Foxy.DataLayer.Mappings;
 using Foxy.WebApi.Repositories;
@@ -17,6 +16,14 @@ namespace Foxy.WebApi
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<GameCategoryService>();
+            builder.Services.AddScoped<GameService>();
+            builder.Services.AddScoped<MatchMemberService>();
+            builder.Services.AddScoped<MatchService>();
+            builder.Services.AddScoped<StoreItemService>();
+            builder.Services.AddScoped<SuggestionService>();
+            builder.Services.AddScoped<SuggestionVoteService>();
+            builder.Services.AddScoped<TicketService>();
+            builder.Services.AddScoped<UserItemService>();
 
             // Add Swagger services
             builder.Services.AddEndpointsApiExplorer();
