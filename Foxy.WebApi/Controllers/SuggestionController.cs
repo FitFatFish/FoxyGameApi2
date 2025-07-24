@@ -5,62 +5,54 @@ using Foxy.DataLayer.Models.Support;
 using Foxy.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Foxy.WebApi.Controllers
+namespace Foxy.WebApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class SuggestionController(SuggestionService service, IMapper mapper) : Controller
 {
-    public class SuggestionController : Controller
+    [HttpGet]
+    public async Task<IActionResult> GetAll() => Ok(await service.GetAllAsync());
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(Guid id)
     {
-        private readonly SuggestionService _service;
-        private readonly IMapper _mapper;
-
-        public SuggestionController(SuggestionService service, IMapper mapper)
+        var item = await service.GetByIdAsync(id);
+        if (item == null)
         {
-            _service = service;
-            _mapper = mapper;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+        var result = mapper.Map<SuggestionResDto>(item);
+        return Ok(result);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var item = await _service.GetByIdAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+    [HttpPost]
+    public async Task<IActionResult> Create(SuggestionReqDto reqentity)
+    {
+        var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        var entity = mapper.Map<Suggestion>(reqentity);
+        entity.CreatedBy = Guid.Parse(userid);
+        entity.CreatedAt = DateTime.Now.ToUniversalTime();
+        var created = await service.CreateAsync(entity);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
 
-            var result = _mapper.Map<SuggestionResDto>(item);
-            return Ok(result);
-        }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, SuggestionReqDto reqentity)
+    {
+        //var entity = await _service.GetByIdAsync(id);
+        //entity.Title = reqentity.Title;
+        var entity = mapper.Map<Suggestion>(reqentity);
+        if (id != entity.Id) return BadRequest();
+        await service.UpdateAsync(entity);
+        return NoContent();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(SuggestionReqDto reqentity)
-        {
-            var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
-            var entity = _mapper.Map<Suggestion>(reqentity);
-            entity.CreatedBy = Guid.Parse(userid);
-            entity.CreatedAt = DateTime.Now.ToUniversalTime();
-            var created = await _service.CreateAsync(entity);
-            return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, SuggestionReqDto reqentity)
-        {
-            //var entity = await _service.GetByIdAsync(id);
-            //entity.Title = reqentity.Title;
-            var entity = _mapper.Map<Suggestion>(reqentity);
-            if (id != entity.Id) return BadRequest();
-            await _service.UpdateAsync(entity);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var deleted = await _service.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var deleted = await service.DeleteAsync(id);
+        return deleted ? NoContent() : NotFound();
     }
 }

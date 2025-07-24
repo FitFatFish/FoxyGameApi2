@@ -5,65 +5,57 @@ using Foxy.DataLayer.Models.Games;
 using Foxy.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Foxy.WebApi.Controllers
+namespace Foxy.WebApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class GameCategoryController(GameCategoryService service, IMapper mapper) : ControllerBase
 {
-    // todo: replace all api with dto's 
-
-    [ApiController]
-    [Route("api/[controller]")]
-    public class GameCategoryController : ControllerBase
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        private readonly GameCategoryService _service;
-        private readonly IMapper _mapper;
-        public GameCategoryController(GameCategoryService service, IMapper mapper)
+        return Ok(await service.GetAllAsync());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var item = await service.GetByIdAsync(id);
+        if (item == null)
         {
-            _service = service;
-            _mapper = mapper;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+        var result = mapper.Map<GameCategoryResDto>(item);
+        return Ok(result);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var item = await _service.GetByIdAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+    [HttpPost]
+    public async Task<IActionResult> Create(GameCategoryReqDto reqentity)
+    {
+        var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        var entity = mapper.Map<GameCategory>(reqentity);
+        entity.CreatedBy = Guid.Parse(userid);
+        entity.CreatedAt = DateTime.Now.ToUniversalTime();
+        var created = await service.CreateAsync(entity);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
 
-            var result = _mapper.Map<GameCategoryResDto>(item);
-            return  Ok(result);
-        }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, GameCategoryReqDto reqentity)
+    {
+        //var entity = await _service.GetByIdAsync(id);
+        //entity.Title = reqentity.Title;
+        var entity = mapper.Map<GameCategory>(reqentity);
+        if (id != entity.Id) return BadRequest();
+        await service.UpdateAsync(entity);
+        return NoContent();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(GameCategoryReqDto reqentity)
-        {
-            var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
-            var entity = _mapper.Map<GameCategory>(reqentity);
-            entity.CreatedBy = Guid.Parse(userid);
-            entity.CreatedAt = DateTime.Now.ToUniversalTime();
-            var created = await _service.CreateAsync(entity);
-            return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, GameCategoryReqDto reqentity)
-        {
-            //var entity = await _service.GetByIdAsync(id);
-            //entity.Title = reqentity.Title;
-            var entity = _mapper.Map<GameCategory>(reqentity);
-            if (id != entity.Id) return BadRequest();
-            await _service.UpdateAsync(entity);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var deleted = await _service.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var deleted = await service.DeleteAsync(id);
+        return deleted ? NoContent() : NotFound();
     }
 }

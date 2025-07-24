@@ -6,62 +6,63 @@ using Foxy.DataLayer.Models.Support;
 using Foxy.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Foxy.WebApi.Controllers
+namespace Foxy.WebApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TicketController : Controller
 {
-    public class TicketController : Controller
+    private readonly TicketService _service;
+    private readonly IMapper _mapper;
+
+    public TicketController(TicketService service, IMapper mapper)
     {
-        private readonly TicketService _service;
-        private readonly IMapper _mapper;
+        _service = service;
+        _mapper = mapper;
+    }
 
-        public TicketController(TicketService service, IMapper mapper)
+    [HttpGet]
+    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var item = await _service.GetByIdAsync(id);
+        if (item == null)
         {
-            _service = service;
-            _mapper = mapper;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+        var result = _mapper.Map<TicketResDto>(item);
+        return Ok(result);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var item = await _service.GetByIdAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+    [HttpPost]
+    public async Task<IActionResult> Create(TicketReqDto reqentity)
+    {
+        var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        var entity = _mapper.Map<Ticket>(reqentity);
+        entity.CreatedBy = Guid.Parse(userid);
+        entity.CreatedAt = DateTime.Now.ToUniversalTime();
+        var created = await _service.CreateAsync(entity);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
 
-            var result = _mapper.Map<TicketResDto>(item);
-            return Ok(result);
-        }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, TicketReqDto reqentity)
+    {
+        //var entity = await _service.GetByIdAsync(id);
+        //entity.Title = reqentity.Title;
+        var entity = _mapper.Map<Ticket>(reqentity);
+        if (id != entity.Id) return BadRequest();
+        await _service.UpdateAsync(entity);
+        return NoContent();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(TicketReqDto reqentity)
-        {
-            var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
-            var entity = _mapper.Map<Ticket>(reqentity);
-            entity.CreatedBy = Guid.Parse(userid);
-            entity.CreatedAt = DateTime.Now.ToUniversalTime();
-            var created = await _service.CreateAsync(entity);
-            return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, TicketReqDto reqentity)
-        {
-            //var entity = await _service.GetByIdAsync(id);
-            //entity.Title = reqentity.Title;
-            var entity = _mapper.Map<Ticket>(reqentity);
-            if (id != entity.Id) return BadRequest();
-            await _service.UpdateAsync(entity);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var deleted = await _service.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var deleted = await _service.DeleteAsync(id);
+        return deleted ? NoContent() : NotFound();
     }
 }
