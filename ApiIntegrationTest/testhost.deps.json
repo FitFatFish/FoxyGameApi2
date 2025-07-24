@@ -1,0 +1,29 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {
+    "defines": [
+      "DEBUG",
+      "TRACE",
+      "NET9_0"
+    ],
+    "languageVersion": "latest"
+  },
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ApiIntegrationTest/1.0.0": {
+        "dependencies": {},
+        "runtime": {}
+      }
+    }
+  },
+  "libraries": {
+    "ApiIntegrationTest/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
