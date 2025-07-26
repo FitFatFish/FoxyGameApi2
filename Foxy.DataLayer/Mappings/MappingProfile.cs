@@ -12,31 +12,31 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<GameCategoryReqDto, GameCategory>();
-        CreateMap<GameCategoryResDto, GameCategory>();
+        CreateMap<GameCategory, GameCategoryResDto >();
 
         CreateMap<GameReqDto, Game>();
-        CreateMap<GameResDto, Game>();
+        CreateMap<Game,GameResDto>();
 
         CreateMap<MatchReqDto, Match>();
-        CreateMap<MatchResDto, Match>();
+        CreateMap<Match,MatchResDto >();
 
         CreateMap<SuggestionReqDto, Suggestion>();
-        CreateMap<SuggestionResDto, Suggestion>();
+        CreateMap<Suggestion,SuggestionResDto >();
 
         CreateMap<SuggestionVoteReqDto, SuggestionVote>();
-        CreateMap<SuggestionVoteResDto, SuggestionVote>();
+        CreateMap<SuggestionVote, SuggestionVoteResDto>();
 
         CreateMap<TicketReqDto, Ticket>();
-        CreateMap<TicketResDto, Ticket>();
+        CreateMap<Ticket, TicketResDto>();
 
         CreateMap<StoreItemReqDto, StoreItem>();
-        CreateMap<StoreItemResDto, StoreItem>();
+        CreateMap<StoreItem, StoreItemResDto>();
 
         CreateMap<UserItemReqDto, UserItem>();
-        CreateMap<UserItemResDto, UserItem>();
+        CreateMap<UserItem, UserItemResDto>();
 
         CreateMap<UserProfileReqDto, UserProfile>();
-        CreateMap<UserProfileResDto, UserProfile>();
+        CreateMap<UserProfile, UserProfileResDto>();
 
     }
 }

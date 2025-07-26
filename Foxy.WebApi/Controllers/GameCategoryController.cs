@@ -34,6 +34,11 @@ public class GameCategoryController(GameCategoryService service, IMapper mapper)
     public async Task<IActionResult> Create(GameCategoryReqDto reqentity)
     {
         var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+       //Todo only for test remove after auth
+        if (string.IsNullOrEmpty(userid))
+        {
+            userid = "a5c00b28-0d14-4250-9f99-d30b169caaac";
+        }
         var entity = mapper.Map<GameCategory>(reqentity);
         entity.CreatedBy = Guid.Parse(userid);
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
