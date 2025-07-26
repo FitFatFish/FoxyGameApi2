@@ -1,19 +1,57 @@
 ﻿using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
 using Foxy.DataLayer.Models.Games;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 
 namespace ApiIntegrationTest
 {
     public class GameControllerTests
     {
+
+
+
+        private readonly FoxyWebApiFactory _application;
+        private readonly HttpClient _client;
+        private GameCategory _category1;
+        private GameCategory _category2;
+
+        public GameControllerTests()
+        {
+            _application = new FoxyWebApiFactory();
+            _client = _application.CreateClient();
+            InitializeCategoriesAsync().GetAwaiter().GetResult();
+        }
+
+        private async Task InitializeCategoriesAsync()
+        {
+            // Check if categories already exist to avoid duplicates
+            var response = await _client.GetAsync("/api/GameCategory");
+            var categories = await response.Content.ReadFromJsonAsync<GameCategory[]>();
+            if (categories != null && categories.Length >= 2)
+            {
+                _category1 = categories[0];
+                _category2 = categories[1];
+                return;
+            }
+
+            // Create first category
+            var req1 = new GameCategoryReqDto { Title = "Category1" };
+            var postResponse1 = await _client.PostAsJsonAsync("/api/GameCategory", req1);
+            postResponse1.EnsureSuccessStatusCode();
+            _category1 = await postResponse1.Content.ReadFromJsonAsync<GameCategory>();
+
+            // Create second category
+            var req2 = new GameCategoryReqDto { Title = "Category2" };
+            var postResponse2 = await _client.PostAsJsonAsync("/api/GameCategory", req2);
+            postResponse2.EnsureSuccessStatusCode();
+            _category2 = await postResponse2.Content.ReadFromJsonAsync<GameCategory>();
+        }
+
+
+
+
         [Fact]
         public async Task GetAll_ReturnsOk()
         {
@@ -49,14 +87,15 @@ namespace ApiIntegrationTest
             var client = application.CreateClient();
             //get gamecategory
             var response = await client.GetAsync("/api/GameCategory");
-            var rescate = await response.Content.ReadFromJsonAsync<GameCategory[]>();
+            var categories = await response.Content.ReadFromJsonAsync<GameCategory[]>();
             //get first
-            var gamecategor= rescate.First();
-            var req = new GameReqDto { 
-                Title = "TestGame" ,
-                GameCategoryId=gamecategor.Id,
-               Documentation="test",
-               ImageGuid="test"
+            var firstCategory = categories.First();
+            var req = new GameReqDto
+            {
+                Title = "TestGame",
+                GameCategoryId = firstCategory.Id,
+                Documentation = "test",
+                ImageGuid = "test"
             };
             var postResponse = await client.PostAsJsonAsync("/api/Game", req);
             Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
@@ -72,7 +111,6 @@ namespace ApiIntegrationTest
             Assert.NotNull(getResult);
             Assert.Equal("TestGame", getResult.Title);
         }
-
 
         [Fact]
         public async Task Update_Works_And_BadRequest_On_Id_Mismatch()

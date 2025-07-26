@@ -9,4 +9,3 @@ public class GameReqDto
     public string ImageGuid { get; set; }
     public string Documentation { get; set; }
 }
-

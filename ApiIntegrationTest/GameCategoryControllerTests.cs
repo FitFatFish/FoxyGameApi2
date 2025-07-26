@@ -4,9 +4,11 @@ using FluentAssertions;
 using System.Net;
 using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ApiIntegrationTest;
+
+
+
 
 public class GameCategoryControllerTests
 {
@@ -26,7 +28,6 @@ public class GameCategoryControllerTests
         var res = await response.Content.ReadFromJsonAsync<GameCategory[]>();
         //res.Length.Should().BeInRange(0, 0);
         res.Should().NotBeNull();
-
     }
 
     [Fact]
