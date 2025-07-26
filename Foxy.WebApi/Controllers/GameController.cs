@@ -31,6 +31,10 @@ public class GameController(GameService service, IMapper mapper) : ControllerBas
     public async Task<IActionResult> Create(GameReqDto reqentity)
     {
         var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        if (string.IsNullOrEmpty(userid))
+        {
+            userid = "a5c00b28-0d14-4250-9f99-d30b169caaac";
+        }
         var entity = mapper.Map<Game>(reqentity);
         entity.CreatedBy = Guid.Parse(userid);
         entity.CreatedAt = DateTime.Now.ToUniversalTime();

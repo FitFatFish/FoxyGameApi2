@@ -17,9 +17,18 @@ public class GameService(IUnitOfWork unitOfWork, IRepository<Game> repository)
 
     public async Task<Game> CreateAsync(Game entity)
     {
-        await repository.AddAsync(entity);
-        await unitOfWork.SaveChangesAsync();
-        return entity;
+        try
+        {
+            await repository.AddAsync(entity);
+            await unitOfWork.SaveChangesAsync();
+            return entity;
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+       
     }
 
     public async Task<bool> UpdateAsync(Game entity)
