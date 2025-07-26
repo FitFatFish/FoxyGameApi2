@@ -24,6 +24,7 @@ namespace Foxy.WebApi
             builder.Services.AddScoped<SuggestionVoteService>();
             builder.Services.AddScoped<TicketService>();
             builder.Services.AddScoped<UserItemService>();
+            builder.Services.AddScoped<UserProfileService>();
 
             // Add Swagger services
             builder.Services.AddEndpointsApiExplorer();
