@@ -103,7 +103,7 @@ public class GameCategoryControllerTests
        
         
         // Create first
-        var req = new GameCategoryReqDto { Title = "ToUpdate" };
+        var req = new GameCategoryReqDto { Title = "ToUpdate",CreatedBy = _userprofile.Id };
         var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
         var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
 
@@ -124,7 +124,7 @@ public class GameCategoryControllerTests
        
         
         // Create first
-        var req = new GameCategoryReqDto { Title = "ToDelete" };
+        var req = new GameCategoryReqDto { Title = "ToDelete",CreatedBy= _userprofile.Id };
         var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
         var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
 
