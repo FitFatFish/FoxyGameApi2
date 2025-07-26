@@ -37,7 +37,7 @@ public class GameCategoryController(GameCategoryService service, IMapper mapper)
        //Todo only for test remove after auth
         if (string.IsNullOrEmpty(userid))
         {
-            userid = "a5c00b28-0d14-4250-9f99-d30b169caaac";
+            userid = reqentity.CreatedBy.ToString();
         }
         var entity = mapper.Map<GameCategory>(reqentity);
         entity.CreatedBy = Guid.Parse(userid);
