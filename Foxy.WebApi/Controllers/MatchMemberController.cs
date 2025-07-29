@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Foxy.Core.Dtos.RequestDtos;
+using Foxy.Core.Dtos.ResultDtos;
 using Foxy.DataLayer.Models.Games;
 using Foxy.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public class MatchMemberController(MatchMemberService service, IMapper mapper) :
             return NotFound();
         }
 
-        var result = mapper.Map<MatchMemberReqDto>(item);
+        var result = mapper.Map<MatchMemberResDto>(item);
         return Ok(result);
     }
 
