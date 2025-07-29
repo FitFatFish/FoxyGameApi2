@@ -6,8 +6,9 @@ using System.Net;
 using FluentAssertions;
 using Foxy.DataLayer.Models.Users;
 
-namespace ApiIntegrationTest
-{
+namespace ApiIntegrationTest;
+
+    [TestCaseOrderer("ApiIntegrationTest.TestExecutionOrderer", "ApiIntegrationTest")]
     public class GameControllerTests
     {
 
@@ -79,7 +80,7 @@ namespace ApiIntegrationTest
 
 
 
-        [Fact]
+        [Fact,TestPriority(1)]
         public async Task GetAll_ReturnsOk()
         {
            
@@ -97,7 +98,7 @@ namespace ApiIntegrationTest
 
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task GetById_NotFound_Returns404()
         {
            
@@ -106,7 +107,7 @@ namespace ApiIntegrationTest
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public async Task Create_And_GetById_Works()
         {
             //AddFakeUser();
@@ -135,7 +136,7 @@ namespace ApiIntegrationTest
             Assert.Equal("TestGame", getResult.Title);
         }
 
-        [Fact]
+        [Fact, TestPriority(4)]
         public async Task Update_Works_And_BadRequest_On_Id_Mismatch()
         {
             // Create first
@@ -175,7 +176,7 @@ namespace ApiIntegrationTest
             Assert.Equal(HttpStatusCode.BadRequest, badPutResponse.StatusCode);
         }
 
-        [Fact]
+        [Fact,TestPriority(5)]
         public async Task Delete_Works_And_NotFound()
         {    // Create first
             var req = new GameReqDto
@@ -196,7 +197,7 @@ namespace ApiIntegrationTest
             var delResponse2 = await _client.DeleteAsync($"/api/Game/{created.Id}");
             Assert.Equal(HttpStatusCode.NotFound, delResponse2.StatusCode);
         }
-
+        [Fact,TestPriority(6)]
         public async Task Update_Works_ChangeGameCategory()
         {
             // Create first
@@ -225,4 +226,4 @@ namespace ApiIntegrationTest
             Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
         }
     }
-}
+

@@ -10,7 +10,7 @@ namespace ApiIntegrationTest;
 
 
 
-
+[TestCaseOrderer("ApiIntegrationTest.TestExecutionOrderer", "ApiIntegrationTest")]
 public class GameCategoryControllerTests
 {
     private readonly FoxyWebApiFactory _application;
@@ -51,7 +51,8 @@ public class GameCategoryControllerTests
         }
 
     }
-    [Fact]
+
+    [Fact,TestPriority(1)]
     public async Task GetAll_ReturnsOk()
     {
        
@@ -65,7 +66,7 @@ public class GameCategoryControllerTests
         res.Should().NotBeNull();
     }
 
-    [Fact]
+    [Fact, TestPriority(2)]
     public async Task GetById_NotFound_Returns404()
     {
        
@@ -74,7 +75,7 @@ public class GameCategoryControllerTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    [Fact]
+    [Fact,TestPriority(3)]
     public async Task Create_And_GetById_Works()
     {
         //AddFakeUser();
@@ -97,7 +98,7 @@ public class GameCategoryControllerTests
     }
 
 
-    [Fact]
+    [Fact, TestPriority(4)]
     public async Task Update_Works_And_BadRequest_On_Id_Mismatch()
     {
        
@@ -118,7 +119,7 @@ public class GameCategoryControllerTests
         Assert.Equal(HttpStatusCode.BadRequest, badPutResponse.StatusCode);
     }
 
-    [Fact]
+    [Fact, TestPriority(5)]
     public async Task Delete_Works_And_NotFound()
     {
        
