@@ -138,41 +138,91 @@ namespace ApiIntegrationTest
         [Fact]
         public async Task Update_Works_And_BadRequest_On_Id_Mismatch()
         {
-           
-            
             // Create first
-            var req = new GameCategoryReqDto { Title = "ToUpdate" };
-            var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
-            var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
+            var req =  new GameReqDto
+            {
+                Title = "ToUpdateGame",
+                GameCategoryId = _category1.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
+            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
 
             // Update with correct id
-            var updateReq = new GameCategoryReqDto { Id = created.Id, Title = "Updated" };
-            var putResponse = await _client.PutAsJsonAsync($"/api/GameCategory/{created.Id}", updateReq);
+            var updateReq = new GameReqDto { 
+                Id = created.Id, 
+                Title = "Updated",
+                GameCategoryId = _category1.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var putResponse = await _client.PutAsJsonAsync($"/api/Game/{created.Id}", updateReq);
             Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
 
             // Update with mismatched id
-            var badUpdateReq = new GameCategoryReqDto { Id = Guid.NewGuid(), Title = "Bad" };
-            var badPutResponse = await _client.PutAsJsonAsync($"/api/GameCategory/{created.Id}", badUpdateReq);
+            var badUpdateReq = new GameReqDto { 
+                Id = Guid.NewGuid()
+                , Title = "Bad",
+                GameCategoryId = _category1.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var badPutResponse = await _client.PutAsJsonAsync($"/api/Game/{created.Id}", badUpdateReq);
             Assert.Equal(HttpStatusCode.BadRequest, badPutResponse.StatusCode);
         }
 
         [Fact]
         public async Task Delete_Works_And_NotFound()
-        {
-           
-            
-            // Create first
-            var req = new GameCategoryReqDto { Title = "ToDelete" };
-            var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
-            var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
-
+        {    // Create first
+            var req = new GameReqDto
+            {
+                Title = "ToDelete",
+                GameCategoryId = _category1.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
+            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
             // Delete
-            var delResponse = await _client.DeleteAsync($"/api/GameCategory/{created.Id}");
+            var delResponse = await _client.DeleteAsync($"/api/Game/{created.Id}");
             Assert.Equal(HttpStatusCode.NoContent, delResponse.StatusCode);
 
             // Delete again (should be not found)
-            var delResponse2 = await _client.DeleteAsync($"/api/GameCategory/{created.Id}");
+            var delResponse2 = await _client.DeleteAsync($"/api/Game/{created.Id}");
             Assert.Equal(HttpStatusCode.NotFound, delResponse2.StatusCode);
+        }
+
+        public async Task Update_Works_ChangeGameCategory()
+        {
+            // Create first
+            var req = new GameReqDto
+            {
+                Title = "ToUpdateGamecategoryid",
+                GameCategoryId = _category1.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
+            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
+
+            // Update with correct id
+            var updateReq = new GameReqDto
+            {
+                Id = created.Id,
+                Title = "UpdatedGamecategoryid",
+                GameCategoryId = _category2.Id,
+                CreatedBy = _userprofile.Id,
+                Documentation = "test",
+                ImageGuid = "test"
+            };
+            var putResponse = await _client.PutAsJsonAsync($"/api/Game/{created.Id}", updateReq);
+            Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
         }
     }
 }

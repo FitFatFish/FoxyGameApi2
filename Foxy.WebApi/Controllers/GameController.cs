@@ -36,7 +36,6 @@ public class GameController(GameService service, IMapper mapper) : ControllerBas
         //    return NotFound();
 
         var entity = mapper.Map<Game>(reqentity);
-        entity.CreatedBy = Guid.Parse(userid);
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
         var created = await service.CreateAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
