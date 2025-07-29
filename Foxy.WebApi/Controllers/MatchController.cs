@@ -33,8 +33,7 @@ public class MatchController(MatchService service, IMapper mapper) : Controller
     {
         var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
         var entity = mapper.Map<Match>(reqentity);
-        //entity.CreatedBy = Guid.Parse(userid);
-        //entity.CreatedAt = DateTime.Now.ToUniversalTime();
+        entity.BeginDate = DateTime.UtcNow.ToUniversalTime();
         var created = await service.CreateAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
