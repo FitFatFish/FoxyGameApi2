@@ -20,6 +20,9 @@ public class MappingProfile : Profile
         CreateMap<MatchReqDto, Match>();
         CreateMap<Match,MatchResDto >();
 
+        CreateMap<MatchMemberReqDto, MatchMember>();
+        CreateMap<MatchMember, MatchMemberResDto>();
+
         CreateMap<SuggestionReqDto, Suggestion>();
         CreateMap<Suggestion,SuggestionResDto >();
 
