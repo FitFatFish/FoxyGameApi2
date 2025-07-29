@@ -30,11 +30,11 @@ public class GameController(GameService service, IMapper mapper) : ControllerBas
     [HttpPost]
     public async Task<IActionResult> Create(GameReqDto reqentity)
     {
-        var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
-        if (string.IsNullOrEmpty(userid))
-        {
-            userid = reqentity.CreatedBy.ToString();
-        }
+        //todo for Authorize
+        //var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        //if(userid.ToString()!=reqentity.CreatedBy.ToString())
+        //    return NotFound();
+
         var entity = mapper.Map<Game>(reqentity);
         entity.CreatedBy = Guid.Parse(userid);
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
