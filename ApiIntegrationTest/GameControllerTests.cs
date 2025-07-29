@@ -24,10 +24,10 @@ namespace ApiIntegrationTest;
         {
             _application = new FoxyWebApiFactory();
             _client = _application.CreateClient();
-            InitializeCategoriesAsync().GetAwaiter().GetResult();
+        InitializeGamesAsync().GetAwaiter().GetResult();
         }
 
-        private async Task InitializeCategoriesAsync()
+        private async Task InitializeGamesAsync()
         {  // Check if userpfiles already exist to avoid duplicates
             var responseuser = await _client.GetAsync("/api/UserProfile");
             var userprofiles = await responseuser.Content.ReadFromJsonAsync<UserProfile[]>();
