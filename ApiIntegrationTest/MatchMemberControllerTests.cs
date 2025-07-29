@@ -1,13 +1,6 @@
 ﻿using Foxy.Core.Dtos.RequestDtos;
-
-using Foxy.DataLayer.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Foxy.Core.Infrastructures.Enums;
 using Foxy.DataLayer.Models.Games;

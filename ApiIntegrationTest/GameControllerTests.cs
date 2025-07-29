@@ -1,10 +1,8 @@
 ﻿using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
-using Foxy.DataLayer.Models.Games;
 using System.Net.Http.Json;
 using System.Net;
 using FluentAssertions;
-using Foxy.DataLayer.Models.Users;
 
 namespace ApiIntegrationTest;
 

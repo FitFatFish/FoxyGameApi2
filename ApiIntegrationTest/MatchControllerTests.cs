@@ -3,7 +3,6 @@ using FluentAssertions;
 using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
 using Foxy.DataLayer.Models.Games;
-using Foxy.DataLayer.Models.Users;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -142,7 +141,7 @@ public class MatchControllerTests
         {
             GameId = _game1.Id,
             BeginDate = DateTime.UtcNow,
-            
+
         };
         var postResponse = await _client.PostAsJsonAsync("/api/Match", req);
         Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
@@ -175,7 +174,7 @@ public class MatchControllerTests
         // Update with correct id
         var updateReq = new MatchReqDto
         {
-            Id=created.Id,
+            Id = created.Id,
             GameId = _game2.Id,
             BeginDate = DateTime.UtcNow,
 
@@ -186,7 +185,7 @@ public class MatchControllerTests
         // Update with mismatched id
         var badUpdateReq = new Match
         {
-            Id = Guid.NewGuid(), 
+            Id = Guid.NewGuid(),
             GameId = _game1.Id,
             BeginDate = DateTime.UtcNow,
 
