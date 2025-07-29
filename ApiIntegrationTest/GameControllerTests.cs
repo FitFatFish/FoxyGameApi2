@@ -16,9 +16,9 @@ namespace ApiIntegrationTest;
 
         private readonly FoxyWebApiFactory _application;
         private readonly HttpClient _client;
-        private UserProfile _userprofile;
-        private GameCategory _category1;
-        private GameCategory _category2;
+        private UserProfileResDto _userprofile;
+        private GameCategoryResDto _category1;
+        private GameCategoryResDto _category2;
 
         public GameControllerTests()
         {
@@ -30,7 +30,7 @@ namespace ApiIntegrationTest;
         private async Task InitializeGamesAsync()
         {  // Check if userpfiles already exist to avoid duplicates
             var responseuser = await _client.GetAsync("/api/UserProfile");
-            var userprofiles = await responseuser.Content.ReadFromJsonAsync<UserProfile[]>();
+            var userprofiles = await responseuser.Content.ReadFromJsonAsync<UserProfileResDto[]>();
             if (userprofiles != null && userprofiles.Length >= 1)
             {
                 _userprofile = userprofiles[0];
@@ -49,11 +49,11 @@ namespace ApiIntegrationTest;
                 };
                 var postResponseuser = await _client.PostAsJsonAsync("/api/UserProfile", requser);
                 postResponseuser.EnsureSuccessStatusCode();
-                _userprofile = await postResponseuser.Content.ReadFromJsonAsync<UserProfile>();
+                _userprofile = await postResponseuser.Content.ReadFromJsonAsync<UserProfileResDto>();
             }
             // Check if categories already exist to avoid duplicates
             var response = await _client.GetAsync("/api/GameCategory");
-            var categories = await response.Content.ReadFromJsonAsync<GameCategory[]>();
+            var categories = await response.Content.ReadFromJsonAsync<GameCategoryResDto[]>();
             if (categories != null && categories.Length >= 2)
             {
                 _category1 = categories[0];
@@ -66,13 +66,13 @@ namespace ApiIntegrationTest;
                 var req1 = new GameCategoryReqDto { Title = "Category1",CreatedBy=_userprofile.Id };
                 var postResponse1 = await _client.PostAsJsonAsync("/api/GameCategory", req1);
                 postResponse1.EnsureSuccessStatusCode();
-                _category1 = await postResponse1.Content.ReadFromJsonAsync<GameCategory>();
+                _category1 = await postResponse1.Content.ReadFromJsonAsync<GameCategoryResDto>();
 
                 // Create second category
                 var req2 = new GameCategoryReqDto { Title = "Category2", CreatedBy = _userprofile.Id };
                 var postResponse2 = await _client.PostAsJsonAsync("/api/GameCategory", req2);
                 postResponse2.EnsureSuccessStatusCode();
-                _category2 = await postResponse2.Content.ReadFromJsonAsync<GameCategory>();
+                _category2 = await postResponse2.Content.ReadFromJsonAsync<GameCategoryResDto>();
             }
           
         }
@@ -92,7 +92,7 @@ namespace ApiIntegrationTest;
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var res = await response.Content.ReadFromJsonAsync<Game[]>();
+            var res = await response.Content.ReadFromJsonAsync<GameResDto[]>();
             //res.Length.Should().BeInRange(0, 0);
             res.Should().NotBeNull();
 
@@ -124,7 +124,7 @@ namespace ApiIntegrationTest;
             var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
             Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
 
-            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
+            var created = await postResponse.Content.ReadFromJsonAsync<GameResDto>();
             Assert.NotNull(created);
             Assert.Equal("TestGame", created.Title);
 
@@ -149,7 +149,7 @@ namespace ApiIntegrationTest;
                 ImageGuid = "test"
             };
             var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
-            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
+            var created = await postResponse.Content.ReadFromJsonAsync<GameResDto>();
 
             // Update with correct id
             var updateReq = new GameReqDto { 
@@ -188,7 +188,7 @@ namespace ApiIntegrationTest;
                 ImageGuid = "test"
             };
             var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
-            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
+            var created = await postResponse.Content.ReadFromJsonAsync<GameResDto>();
             // Delete
             var delResponse = await _client.DeleteAsync($"/api/Game/{created.Id}");
             Assert.Equal(HttpStatusCode.NoContent, delResponse.StatusCode);
@@ -197,6 +197,7 @@ namespace ApiIntegrationTest;
             var delResponse2 = await _client.DeleteAsync($"/api/Game/{created.Id}");
             Assert.Equal(HttpStatusCode.NotFound, delResponse2.StatusCode);
         }
+
         [Fact,TestPriority(6)]
         public async Task Update_Works_ChangeGameCategory()
         {
@@ -210,7 +211,7 @@ namespace ApiIntegrationTest;
                 ImageGuid = "test"
             };
             var postResponse = await _client.PostAsJsonAsync("/api/Game", req);
-            var created = await postResponse.Content.ReadFromJsonAsync<Game>();
+            var created = await postResponse.Content.ReadFromJsonAsync<GameResDto>();
 
             // Update with correct id
             var updateReq = new GameReqDto

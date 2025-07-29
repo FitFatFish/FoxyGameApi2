@@ -15,7 +15,7 @@ public class GameCategoryControllerTests
 {
     private readonly FoxyWebApiFactory _application;
     private readonly HttpClient _client;
-    private UserProfile _userprofile;
+    private UserProfileResDto _userprofile;
 
     public GameCategoryControllerTests()
     {
@@ -28,7 +28,7 @@ public class GameCategoryControllerTests
     {
         // Check if userpfiles already exist to avoid duplicates
         var responseuser = await _client.GetAsync("/api/UserProfile");
-        var userprofiles = await responseuser.Content.ReadFromJsonAsync<UserProfile[]>();
+        var userprofiles = await responseuser.Content.ReadFromJsonAsync<UserProfileResDto[]>();
         if (userprofiles != null && userprofiles.Length >= 1)
         {
             _userprofile = userprofiles[0];
@@ -47,7 +47,7 @@ public class GameCategoryControllerTests
             };
             var postResponseuser = await _client.PostAsJsonAsync("/api/UserProfile", requser);
             postResponseuser.EnsureSuccessStatusCode();
-            _userprofile = await postResponseuser.Content.ReadFromJsonAsync<UserProfile>();
+            _userprofile = await postResponseuser.Content.ReadFromJsonAsync<UserProfileResDto>();
         }
 
     }
@@ -61,7 +61,7 @@ public class GameCategoryControllerTests
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var res = await response.Content.ReadFromJsonAsync<GameCategory[]>();
+        var res = await response.Content.ReadFromJsonAsync<GameCategoryResDto[]>();
         //res.Length.Should().BeInRange(0, 0);
         res.Should().NotBeNull();
     }
@@ -85,7 +85,7 @@ public class GameCategoryControllerTests
         var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
         Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
 
-        var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
+        var created = await postResponse.Content.ReadFromJsonAsync<GameCategoryResDto>();
         Assert.NotNull(created);
         Assert.Equal("TestCategory", created.Title);
 
@@ -106,7 +106,7 @@ public class GameCategoryControllerTests
         // Create first
         var req = new GameCategoryReqDto { Title = "ToUpdate",CreatedBy = _userprofile.Id };
         var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
-        var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
+        var created = await postResponse.Content.ReadFromJsonAsync<GameCategoryResDto>();
 
         // Update with correct id
         var updateReq = new GameCategoryReqDto { Id = created.Id, Title = "Updated" };
@@ -127,7 +127,7 @@ public class GameCategoryControllerTests
         // Create first
         var req = new GameCategoryReqDto { Title = "ToDelete",CreatedBy= _userprofile.Id };
         var postResponse = await _client.PostAsJsonAsync("/api/GameCategory", req);
-        var created = await postResponse.Content.ReadFromJsonAsync<GameCategory>();
+        var created = await postResponse.Content.ReadFromJsonAsync<GameCategoryResDto>();
 
         // Delete
         var delResponse = await _client.DeleteAsync($"/api/GameCategory/{created.Id}");
