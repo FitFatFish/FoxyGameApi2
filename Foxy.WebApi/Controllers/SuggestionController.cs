@@ -29,10 +29,12 @@ public class SuggestionController(SuggestionService service, IMapper mapper) : C
 
     [HttpPost]
     public async Task<IActionResult> Create(SuggestionReqDto reqentity)
-    {
-        var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+    { //todo for Authorize
+        //var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
+        //if(userid.ToString()!=reqentity.CreatedBy.ToString())
+        //    return NotFound();
+        
         var entity = mapper.Map<Suggestion>(reqentity);
-        entity.CreatedBy = Guid.Parse(userid);
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
         var created = await service.CreateAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
