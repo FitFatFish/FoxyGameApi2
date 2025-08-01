@@ -12,5 +12,16 @@ public class SuggestionReqDto
     public int LikeCount { get; set; }
     public int DislikeCount { get; set; }
     public PublishTypeEnum Published { get; set; }
+
+    #region Create
+    public Guid CreatedBy { get; set; }
+    public DateTime CreatedAt { get; set; }
+    #endregion
+
+    #region Update
+    public Guid? UpdatedBy { get; set; }
+    public DateTime? UpdateAt { get; set; }
+    #endregion
+
 }
 
