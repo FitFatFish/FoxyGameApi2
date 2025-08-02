@@ -3,21 +3,21 @@ using Xunit.Sdk;
 
 namespace ApiIntegrationTest;
 
-    public class TestExecutionOrderer: ITestCaseOrderer
+public class TestExecutionOrderer : ITestCaseOrderer
+{
+    public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases)
+  where TTestCase : ITestCase
     {
-        public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases)
-      where TTestCase : ITestCase
+        var sorted = testCases.OrderBy(tc =>
         {
-            var sorted = testCases.OrderBy(tc =>
-            {
-                var attr = tc.TestMethod.Method
-                    .GetCustomAttributes(typeof(TestPriorityAttribute).AssemblyQualifiedName!)
-                    .FirstOrDefault();
+            var attr = tc.TestMethod.Method
+                .GetCustomAttributes(typeof(TestPriorityAttribute).AssemblyQualifiedName!)
+                .FirstOrDefault();
 
-                return attr == null ? 0 : attr.GetNamedArgument<int>("Priority");
-            });
+            return attr == null ? 0 : attr.GetNamedArgument<int>("Priority");
+        });
 
-            return sorted;
-        }
+        return sorted;
     }
+}
 
