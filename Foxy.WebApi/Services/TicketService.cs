@@ -24,9 +24,18 @@ public class TicketService(IUnitOfWork unitOfWork, IRepository<Ticket> repositor
 
     public async Task<bool> UpdateAsync(Ticket entity)
     {
-        repository.Update(entity);
-        await unitOfWork.SaveChangesAsync();
-        return true;
+        try
+        {
+            repository.Update(entity);
+            await unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+
+            return false;
+        }
+     
     }
 
     public async Task<bool> DeleteAsync(Guid id)

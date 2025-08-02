@@ -84,7 +84,7 @@ public class MatchMemberControllerTests
             }
             //check game already exist
             var responsegame = await _client.GetAsync("/api/Game");
-            var games = await responsegamecategory.Content.ReadFromJsonAsync<GameResDto[]>();
+            var games = await responsegame.Content.ReadFromJsonAsync<GameResDto[]>();
             if (games != null && games.Length >=1)
             {
                 _game1 = games.First();

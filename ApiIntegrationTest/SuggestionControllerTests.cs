@@ -2,22 +2,18 @@
 using Foxy.Core.Dtos.RequestDtos;
 using Foxy.Core.Dtos.ResultDtos;
 using Foxy.Core.Infrastructures.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiIntegrationTest;
 [TestCaseOrderer("ApiIntegrationTest.TestExecutionOrderer", "ApiIntegrationTest")]
 
 public class SuggestionControllerTests
-    {
+{
     private readonly FoxyWebApiFactory _application;
     private readonly HttpClient _client;
     private UserProfileResDto _userprofile;
+    private SuggestionResDto _suggestion;
     public SuggestionControllerTests()
     {
         _application = new FoxyWebApiFactory();
@@ -34,7 +30,7 @@ public class SuggestionControllerTests
         {
             _userprofile = userprofiles[0];
 
-            return;
+
         }
         else
         {
@@ -50,7 +46,22 @@ public class SuggestionControllerTests
             postResponseuser.EnsureSuccessStatusCode();
             _userprofile = await postResponseuser.Content.ReadFromJsonAsync<UserProfileResDto>();
         }
+        var req = new SuggestionReqDto
+        {
+            Title = "TestSuggestion",
+            ConfirmedDescription = "test",
+            Description = "test",
+            DislikeCount = 0,
+            LikeCount = 0,
+            Published = PublishTypeEnum.Draft,
+            CreatedBy = _userprofile.Id,
+            CreatedAt = DateTime.UtcNow,
+        };
+        var postResponse = await _client.PostAsJsonAsync("/api/Suggestion", req);
+        Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
 
+        _suggestion = await postResponse.Content.ReadFromJsonAsync<SuggestionResDto>();
+        return;
     }
 
     [Fact, TestPriority(1)]
@@ -82,20 +93,22 @@ public class SuggestionControllerTests
         //AddFakeUser();
 
 
-        var req = new SuggestionReqDto { 
+        var req = new SuggestionReqDto
+        {
             Title = "TestSuggestion",
-            ConfirmedDescription="test" ,  
-        Description="test" ,
-        DislikeCount=0,
-        LikeCount=0,
-        Published=PublishTypeEnum.Draft,
-        CreatedBy=_userprofile.Id,
-        CreatedAt=DateTime.UtcNow,
+            ConfirmedDescription = "test",
+            Description = "test",
+            DislikeCount = 0,
+            LikeCount = 0,
+            Published = PublishTypeEnum.Draft,
+            CreatedBy = _userprofile.Id,
+            CreatedAt = DateTime.UtcNow,
         };
         var postResponse = await _client.PostAsJsonAsync("/api/Suggestion", req);
         Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
 
         var created = await postResponse.Content.ReadFromJsonAsync<SuggestionResDto>();
+
         Assert.NotNull(created);
         Assert.Equal("TestSuggestion", created.Title);
 
@@ -111,10 +124,9 @@ public class SuggestionControllerTests
     [Fact, TestPriority(4)]
     public async Task Update_Works_And_BadRequest_On_Id_Mismatch()
     {
-
-
         // Create first
-        var req = new SuggestionReqDto { 
+        var req = new SuggestionReqDto
+        {
             Title = "ToUpdate",
             ConfirmedDescription = "test",
             Description = "test",
@@ -128,12 +140,13 @@ public class SuggestionControllerTests
         var created = await postResponse.Content.ReadFromJsonAsync<SuggestionResDto>();
 
         // Update with correct id
-        var updateReq = new SuggestionReqDto { 
+        var updateReq = new SuggestionReqDto
+        {
             Id = created.Id,
             Title = "Updated",
             ConfirmedDescription = created.ConfirmedDescription,
             Description = created.Description,
-            DislikeCount =created.DislikeCount,
+            DislikeCount = created.DislikeCount,
             LikeCount = created.LikeCount,
             Published = created.Published,
             CreatedBy = _userprofile.Id,
@@ -177,5 +190,64 @@ public class SuggestionControllerTests
         Assert.Equal(HttpStatusCode.NotFound, delResponse2.StatusCode);
     }
 
+    [Fact, TestPriority(6)]
+    public async Task Update_Works_When_PublishedUpdated()
+    {
+        // Update Published
+        var updateReq = new SuggestionReqDto
+        {
+            Id = _suggestion.Id,
+            Title = _suggestion.Title,
+            ConfirmedDescription = _suggestion.ConfirmedDescription,
+            Description = _suggestion.Description,
+            DislikeCount = _suggestion.DislikeCount,
+            LikeCount = _suggestion.LikeCount,
+            Published = PublishTypeEnum.Published,
+            CreatedBy = _userprofile.Id,
+            CreatedAt = DateTime.UtcNow,
+        };
+        var putResponse = await _client.PutAsJsonAsync($"/api/Suggestion/{_suggestion.Id}", updateReq);
+        Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+    }
+
+    [Fact, TestPriority(7)]
+    public async Task Update_Works_When_LikeCountUpdated()
+    {
+        // Update LikeCount
+        var updateReq = new SuggestionReqDto
+        {
+            Id = _suggestion.Id,
+            Title = _suggestion.Title,
+            ConfirmedDescription = _suggestion.ConfirmedDescription,
+            Description = _suggestion.Description,
+            DislikeCount = _suggestion.DislikeCount,
+            LikeCount = _suggestion.LikeCount++,
+            Published = _suggestion.Published,
+            CreatedBy = _userprofile.Id,
+            CreatedAt = DateTime.UtcNow,
+        };
+        var putResponse = await _client.PutAsJsonAsync($"/api/Suggestion/{_suggestion.Id}", updateReq);
+        Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+    }
+
+    [Fact, TestPriority(8)]
+    public async Task Update_Works_When_DislikeCountUpdated()
+    {
+        // Update DislikeCount
+        var updateReq = new SuggestionReqDto
+        {
+            Id = _suggestion.Id,
+            Title = _suggestion.Title,
+            ConfirmedDescription = _suggestion.ConfirmedDescription,
+            Description = _suggestion.Description,
+            DislikeCount = _suggestion.DislikeCount++,
+            LikeCount = _suggestion.LikeCount,
+            Published = _suggestion.Published,
+            CreatedBy = _userprofile.Id,
+            CreatedAt = DateTime.UtcNow,
+        };
+        var putResponse = await _client.PutAsJsonAsync($"/api/Suggestion/{_suggestion.Id}", updateReq);
+        Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+    }
 }
 

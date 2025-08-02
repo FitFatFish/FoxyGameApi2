@@ -42,7 +42,7 @@ public class TicketController : Controller
     {
         var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
         var entity = _mapper.Map<Ticket>(reqentity);
-        entity.CreatedBy = Guid.Parse(userid);
+        
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
         var created = await _service.CreateAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);

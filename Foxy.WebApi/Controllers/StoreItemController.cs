@@ -32,7 +32,7 @@ public class StoreItemController(StoreItemService service, IMapper mapper) : Con
     {
         var userid = User.Claims.FirstOrDefault(c => c.Type == "userid")?.Value;
         var entity = mapper.Map<StoreItem>(reqentity);
-        entity.CreatedBy = Guid.Parse(userid);
+      
         entity.CreatedAt = DateTime.Now.ToUniversalTime();
         var created = await service.CreateAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
